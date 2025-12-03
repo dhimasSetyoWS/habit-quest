@@ -17,7 +17,7 @@ export default function AuthenticatedLayout({ header, children }) {
                             {header}
                         </div>
                         {route().current("dashboard") && <ProfileStats />}
-                        {route().current("dashboard.tasks.index") && <TopButton href={route('dashboard.tasks.create')} header={"Create Task"} desc="Buat Tugas/Habit Baru!"/>}
+                        {route().current("dashboard.tasks.index") && <TopButton href={route('dashboard.tasks.create')} header={"Create Task"}/>}
                     </div>
                     <div className="text-base font-normal mt-4 text-gray-600">
                         {children}

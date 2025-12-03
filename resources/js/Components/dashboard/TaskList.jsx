@@ -1,57 +1,11 @@
-import {IconEdit, IconStar, IconTrash, IconTrophy} from "../icon/TaskIcon";
-export function TaskList({tasks, setTasks}) {
-
+import { IconEdit, IconStar, IconTrash, IconTrophy } from "../icon/TaskIcon";
+import { Task } from "./Task";
+export function TaskList({ tasks, exp }) {
     // Hitung Total Score dari task yang statusnya "Done"
-    const totalScore = tasks
-        .filter((t) => t.status === "Done")
-        .reduce((acc, curr) => acc + curr.points, 0);
+    // const totalScore = tasks
+    //     .filter((t) => t.status === "Done")
+    //     .reduce((acc, curr) => acc + curr.points, 0);
 
-    // Fungsi Hapus Task
-    const handleDelete = (id) => {
-        if (window.confirm("Yakin ingin menghapus quest ini?")) {
-            setTasks(tasks.filter((task) => task.id !== id));
-        }
-    };
-
-    // Fungsi Edit (Simulasi)
-    const handleEdit = (id) => {
-        const newTitle = prompt(
-            "Edit nama task:",
-            tasks.find((t) => t.id === id).title
-        );
-        if (newTitle) {
-            setTasks(
-                tasks.map((t) => (t.id === id ? { ...t, title: newTitle } : t))
-            );
-        }
-    };
-
-    // Fungsi Ubah Status (Cycle: Todo -> In Progress -> Done -> Todo)
-    const cycleStatus = (id) => {
-        setTasks(
-            tasks.map((task) => {
-                if (task.id === id) {
-                    let newStatus = "Todo";
-                    if (task.status === "Todo") newStatus = "In Progress";
-                    else if (task.status === "In Progress") newStatus = "Done";
-                    return { ...task, status: newStatus };
-                }
-                return task;
-            })
-        );
-    };
-
-    // Helper untuk warna status
-    const getStatusColor = (status) => {
-        switch (status) {
-            case "Done":
-                return "bg-emerald-100 text-emerald-700 border-emerald-200";
-            case "In Progress":
-                return "bg-blue-100 text-blue-700 border-blue-200";
-            default:
-                return "bg-gray-100 text-gray-600 border-gray-200";
-        }
-    };
 
     return (
         <div className="mx-auto my-12">
@@ -76,7 +30,7 @@ export function TaskList({tasks, setTasks}) {
                             Total XP
                         </p>
                         <p className="text-2xl font-bold text-yellow-400">
-                            {totalScore} XP
+                            {exp} XP
                         </p>
                     </div>
                 </div>
@@ -84,72 +38,7 @@ export function TaskList({tasks, setTasks}) {
 
             {/* --- LIST TASK --- */}
             <div className="grid gap-4">
-                {tasks.map((task) => (
-                    <div
-                        key={task.id}
-                        className={`bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 group ${
-                            task.status === "Done"
-                                ? "opacity-50"
-                                : "opacity-100"
-                        }`}
-                    >
-                        {/* Bagian Kiri: Info Task */}
-                        <div className="flex items-center gap-4 flex-1">
-                            {/* Status Badge (Clickable) */}
-                            <button
-                                onClick={() => cycleStatus(task.id)}
-                                className={`px-3 py-1 rounded-full text-xs font-bold border cursor-pointer select-none transition-colors min-w-[100px] text-center ${getStatusColor(
-                                    task.status
-                                )}`}
-                                title="Klik untuk ubah status"
-                            >
-                                {task.status}
-                            </button>
-
-                            {/* Judul Task */}
-                            <div className="flex flex-col">
-                                <span
-                                    className={`font-semibold text-lg text-slate-800 ${
-                                        task.status === "Done"
-                                            ? "line-through text-slate-400"
-                                            : ""
-                                    }`}
-                                >
-                                    {task.title}
-                                </span>
-                            </div>
-                        </div>
-
-                        {/* Bagian Kanan: Score & Action */}
-                        <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
-                            {/* Points Badge */}
-                            <div className="flex items-center gap-1 bg-yellow-50 px-3 py-1 rounded-lg border border-yellow-100">
-                                <IconStar />
-                                <span className="font-bold text-yellow-600">
-                                    +{task.points}
-                                </span>
-                            </div>
-
-                            {/* Action Buttons */}
-                            <div className="flex items-center gap-2 border-l pl-4 border-gray-200">
-                                <button
-                                    onClick={() => handleEdit(task.id)}
-                                    className="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"
-                                    title="Edit Task"
-                                >
-                                    <IconEdit />
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(task.id)}
-                                    className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                                    title="Delete Task"
-                                >
-                                    <IconTrash />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                ))}
+                <Task tasks={tasks}/>
             </div>
 
             {/* Empty State jika task kosong */}
